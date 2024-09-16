@@ -5,10 +5,13 @@ import XLSX from 'xlsx';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const client = await clientPromise;
-    const db = client.db('development_mkt');
-    const collection = db.collection('partnerPolos');
+    const db = client.db('development_mkt');  // AQUI VOCÊ DEVERÁ COLOCAR O NOME DO SEU BANCO DE DADOS
+    const collection = db.collection('partnerPolos'); // E AQUI VOCÊ DEVE COLOCAR O NOME DE SUA COLLECTION
 
     const data = await collection.find({}).toArray();
+
+
+    // ----> TODOS OS DADOS QUE VOCÊ DESEJA COLOCAR EM SUA PLANILHA, PUXANDO DE SUA COLLECTION
 
     const sheetData = data.map(item => ({
       Nome: item.responsible?.name || 'N/A',
@@ -37,6 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).send(excelBuffer);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: 'Erro ao exportar os dados.' });
+    res.status(500).json({ message: 'Erro ao exportar os dados.' });  // ERRO CASO TENHA ALGUMA INFORMAÇÃO ERRADA
   }
 }
